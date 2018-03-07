@@ -1,0 +1,113 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+            {% if messages %}
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <p>
+                    <strong>
+                        <i class="ace-icon fa fa-check"></i>
+                        Well done!
+                    </strong>
+                    {{ messages[0] }}
+                </p>
+            </div>
+            {% endif %}
+        {% endwith %}
+
+		<table id="simple-table" class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</th>
+					<th class="center">Category</th>
+					<th class="center">Entry title</th>
+					<th class="center">Image</th>
+					<th class="center">Created</th>
+					<th class="center">Published</th>
+					<th class="center">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in entry_list %}
+				<tr>
+					<td class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</td>
+					<td>
+						<a href="#">{{ item.category.name }}</a>
+					</td>
+					<td>
+						<a href="#">{{ item.title }}</a>
+					</td>
+					<td><img src="{{ item.image }}" style="width:200px" /></td>
+					<td class="center">{{ item.created }}</td>
+					<td class="center">{{ item.published }}</td>
+					<td class="center">
+						<div class="hidden-sm hidden-xs btn-group">
+							<button class="btn btn-xs btn-success">
+								<i class="ace-icon fa fa-check bigger-120"></i>
+							</button>
+
+							<a class="btn btn-xs btn-info" href="/admin/entry/{{ item.id }}" title="Edit this entry">
+								<i class="ace-icon fa fa-pencil bigger-120"></i>
+							</a>
+
+							<a class="btn btn-xs btn-danger" href="/admin/delete_entry?id={{ item.id }}" title="Delete this entry">
+								<i class="ace-icon fa fa-trash-o bigger-120"></i>
+							</a>
+
+							<button class="btn btn-xs btn-warning">
+								<i class="ace-icon fa fa-flag bigger-120"></i>
+							</button>
+						</div>
+						<div class="hidden-md hidden-lg">
+							<div class="inline pos-rel">
+								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+								<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+								</button>
+								<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+									<li>
+										<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+										<span class="blue">
+										<i class="ace-icon fa fa-search-plus bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+										<span class="green">
+										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+										<span class="red">
+										<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<!-- /.span -->
+</div>
+{% endblock %}

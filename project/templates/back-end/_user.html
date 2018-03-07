@@ -1,0 +1,77 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+		<table id="simple-table" class="table  table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</th>
+					<th class="center">User</th>
+					<th class="center">Full name</th>
+					<th class="center">Email</th>
+					<th class="center">Address</th>
+					<th class="center">Nationality</th>
+					<th class="center">Role</th>
+					<th class="center">Created</th>
+					<th class="center">Login</th>
+					<th class="center">Activation</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in user_list %}
+				<tr>
+					<td class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</td>
+					<td>
+                        {% if item.avatar != None and item.avatar != '' %}
+						<a href="#"><img src="{{ item.avatar }}" class="img img-responsive center-block" /></a><br />
+                        {% endif %}
+                        <a href="#">{{ item.username }}</a>
+					</td>
+					<td>
+                        {% if item.firstname != None and item.firstname != '' %}
+                            {{ item.firstname }}
+                        {% endif %}
+                        {% if item.lastname != None and item.lastname != '' %}
+                            {{ item.lastname }}
+                        {% endif %}
+					</td>
+					<td>{{ item.email }}</td>
+					<td>
+                        {% if item.address != None and item.address != '' %}
+                            {{ item.address }}
+                        {% endif %}
+                        {% if item.country != None and item.country != '' %}
+                        - {{ item.country }}
+                        {% endif %}
+                    </td>
+					<td>
+                        {% if item.nationality != None and item.nationality != '' %}
+                            {{ item.nationality }}
+                        {% endif %}
+                    </td>
+					<td>{{ item.role }}</td>
+					<td>{{ item.created }}</td>
+					<td>
+                        {% if item.login != None and item.login != '' %}
+                            {{ item.login }}
+                        {% endif %}
+                    </td>
+					<td>{{ item.activated }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<!-- /.span -->
+</div>
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<form class="form-horizontal" role="form">
+    {% with messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if messages %}
+        <div class="alert alert-block alert-success">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="ace-icon fa fa-times"></i>
+            </button>
+            <p>
+                <strong>
+                    <i class="ace-icon fa fa-check"></i>
+                    Well done!
+                </strong>
+                {{ messages[0] }}
+            </p>
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="ace-icon fa fa-times"></i>
+            </button>
+
+            <strong>
+                <i class="ace-icon fa fa-times"></i>
+                Oh snap!
+            </strong>
+            {{ errors[0] }}
+            <br />
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="cat-parent"> Parent </label>
+		<div class="col-sm-9">
+			<select class="chosen-select col-xs-10 col-sm-5" name="parent_id" id="cat-parent" data-placeholder="Choose a parent category...">
+				<option value="0"></option>
+                {% for item in cat_list %}
+                    {% if item.id != cat.id %}
+				    <option style="font-weight: bold" value="{{ item.id }}" {% if item.id == cat.parent_id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                        {% for item2 in item.get_one_child_list(item.id) %}
+                            {% if item2.id != cat.id %}
+                            <option value="{{ item2.id }}" {% if item2.id == cat.parent_id %}selected="selected"{% endif %}>{{ (item2.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;' | safe }}{{ item2.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="cat-code"> Category code </label>
+		<div class="col-sm-9">
+			<input type="text" name="code" id="cat-code" value="{{ cat.code }}" placeholder="Category code" class="col-xs-10 col-sm-5" autocomplete="off" required />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="cat-name"> Category name </label>
+		<div class="col-sm-9">
+			<input type="text" name="name" id="cat-name" value="{{ cat.name }}" placeholder="Category name" class="col-xs-10 col-sm-5" autocomplete="off" required />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="cat-order"> Order </label>
+		<div class="col-sm-9">
+			<input type="text" name="order" id="cat-order" value="{{ cat.order }}" autocomplete="off" required />
+		</div>
+	</div>
+
+	<div class="clearfix form-actions">
+		<div class="col-md-offset-3 col-md-9">
+			<button formaction="/admin/add_category/{{ cat.id }}" formmethod="post" class="btn btn-info">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				Submit
+			</button>
+			&nbsp; &nbsp; &nbsp;
+			{% if cat == '' %}
+            <button class="btn" type="reset">
+				<i class="ace-icon fa fa-undo bigger-110"></i>
+				Reset
+			</button>
+            {% else %}
+            <a class="btn" href="/admin/category/">
+				<i class="ace-icon fa fa-cancel bigger-110"></i>
+				Cancel
+			</a>
+            {% endif %}
+		</div>
+	</div>
+	
+	<div class="hr hr-24"></div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<table id="simple-table" class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="center">
+							<label class="pos-rel">
+							<input type="checkbox" class="ace" />
+							<span class="lbl"></span>
+							</label>
+						</th>
+						<th class="center">Category code</th>
+						<th class="center">Category name</th>
+						<th class="center">Order</th>
+						<th class="center">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for item in cat_list %}
+                    <tr>
+						<td class="center">
+							<label class="pos-rel">
+							<input type="checkbox" class="ace" />
+							<span class="lbl"></span>
+							</label>
+						</td>
+						<td>
+							<a href="#"><strong>{{ item.code }}</strong></a>
+						</td>
+						<td><strong>{{ item.name }}</strong></td>
+						<td class="center"><strong>{{ item.order }}</strong></td>
+						<td class="center">
+							<div class="hidden-sm hidden-xs btn-group">
+                                {% if item.code != 'general' %}
+								<a class="btn btn-xs btn-info" href="/admin/category/{{ item.id }}" title="Edit this category">
+								    <i class="ace-icon fa fa-pencil bigger-120"></i>
+								</a>
+
+                                <a class="btn btn-xs btn-danger" href="/admin/delete_category?cat_id={{ item.id }}" title="Delete this category">
+								    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+								</a>
+                                {% endif %}
+							</div>
+							<div class="hidden-md hidden-lg">
+								<div class="inline pos-rel">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+									<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+											<span class="blue">
+											<i class="ace-icon fa fa-search-plus bigger-120"></i>
+											</span>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+											<span class="green">
+											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+											</span>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+											<span class="red">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+											</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+
+                    {% for item2 in item.get_one_child_list(item.id) %}
+                    <tr>
+						<td class="center">
+							<label class="pos-rel">
+							<input type="checkbox" class="ace" />
+							<span class="lbl"></span>
+							</label>
+						</td>
+						<td>
+							{{ (item2.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;'|safe }}<a href="#">{{ item2.code }}</a>
+						</td>
+						<td>{{ (item2.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;'|safe }}{{ item2.name }}</td>
+						<td class="center">{{ item2.order }}</td>
+						<td class="center">
+							<div class="hidden-sm hidden-xs btn-group">
+								<a class="btn btn-xs btn-info" href="/admin/category/{{ item2.id }}" title="Edit this category">
+								    <i class="ace-icon fa fa-pencil bigger-120"></i>
+								</a>
+
+                                <a class="btn btn-xs btn-danger" href="/admin/delete_category?cat_id={{ item2.id }}" title="Delete this category">
+								    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+								</a>
+							</div>
+							<div class="hidden-md hidden-lg">
+								<div class="inline pos-rel">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+									<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+											<span class="blue">
+											<i class="ace-icon fa fa-search-plus bigger-120"></i>
+											</span>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+											<span class="green">
+											<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+											</span>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+											<span class="red">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+											</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+                        {% for item3 in item2.get_one_child_list(item2.id) %}
+                        <tr>
+                            <td class="center">
+                                <label class="pos-rel">
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td style="font-style: italic">
+                                {{ (item3.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;'|safe }}<a href="#">{{ item3.code }}</a>
+                            </td>
+                            <td style="font-style: italic">{{ (item3.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;'|safe }}{{ item3.name }}</td>
+                            <td class="center" style="font-style: italic">{{ item3.order }}</td>
+                            <td class="center">
+                                <div class="hidden-sm hidden-xs btn-group">
+                                    <a class="btn btn-xs btn-info" href="/admin/category/{{ item3.id }}" title="Edit this category">
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </a>
+
+                                    <a class="btn btn-xs btn-danger" href="/admin/delete_category?cat_id={{ item3.id }}" title="Delete this category">
+                                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                    </a>
+                                </div>
+                                <div class="hidden-md hidden-lg">
+                                    <div class="inline pos-rel">
+                                        <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                        <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                            <li>
+                                                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                                <span class="blue">
+                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                                </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                                <span class="green">
+                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                                </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                                <span class="red">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<!-- /.span -->
+	</div>
+	<!-- /.row -->
+</form>
+{% endblock %}

@@ -1,0 +1,2 @@
+Simple Authorization:
+http://flask.pocoo.org/snippets/98/

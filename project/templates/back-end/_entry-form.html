@@ -1,0 +1,132 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<form class="form-horizontal" role="form" enctype="multipart/form-data">
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="ace-icon fa fa-times"></i>
+            </button>
+
+            <strong>
+                <i class="ace-icon fa fa-times"></i>
+                Oh snap!
+            </strong>
+            {{ errors[0] }}
+            <br />
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="category"> Category </label>
+		<div class="col-sm-9">
+			<select class="chosen-select col-xs-10 col-sm-5" name="category_id" id="category" data-placeholder="Choose a category...">
+				<option value="0"></option>
+            {% if entry != None %}
+                {% for item in cat_list %}
+				    <option style="font-weight: bold" value="{{ item.id }}" {% if item.id == entry.category.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                    {% for item2 in item.get_one_child_list(item.id) %}
+                        <option value="{{ item2.id }}" {% if item2.id == entry.category.id %}selected="selected"{% endif %}>{{ (item2.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;' | safe }}{{ item2.name }}</option>
+                        {% for item3 in item2.get_one_child_list(item2.id) %}
+                            <option style="font-style: italic" value="{{ item3.id }}" {% if item3.id == entry.category.id %}selected="selected"{% endif %}>{{ (item3.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;' | safe }}{{ item3.name }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for item in cat_list %}
+				    <option style="font-weight: bold" value="{{ item.id }}">{{ item.name }}</option>
+                    {% for item2 in item.get_one_child_list(item.id) %}
+                        <option value="{{ item2.id }}">{{ (item2.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;' | safe }}{{ item2.name }}</option>
+                        {% for item3 in item2.get_one_child_list(item2.id) %}
+                            <option style="font-style: italic" value="{{ item3.id }}">{{ (item3.level - 1)*'&nbsp;&nbsp;&nbsp;&nbsp;' | safe }}{{ item3.name }}</option>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-title"> Title *</label>
+		<div class="col-sm-9">
+			<input type="text" name="title" id="id-title" value="{{ entry.title }}" placeholder="Entry title " class="form-control" autocomplete="off" required />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-slug"> Slug *</label>
+		<div class="col-sm-9">
+			<input type="text" name="slug" id="id-slug" value="{{ entry.slug }}" placeholder="Slug will auto complete" class="form-control" autocomplete="off" required />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-image"> Image </label>
+		<div class="col-sm-9">
+            {% if entry != None %}
+            <img src="{{ entry.image }}" class="img-responsive" />
+            {% endif %}
+			<input type="file" name="image" id="id-image" placeholder="Image" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-summary"> Summary </label>
+		<div class="col-sm-9">
+			<textarea class="form-control" name="summary" id="id-summary" placeholder="Summary" rows="5">{{ entry.summary }}</textarea>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-content"> Content *</label>
+		<div class="col-sm-9">
+			<textarea name="content" id="id-content" required>{{ entry.content }}</textarea>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-tags">Tags</label>
+		<div class="col-sm-9">
+			<input type="text" name="tags" id="id-tags" value="{{ entry.tags }}" class="form-control" placeholder="Enter tags..." autocomplete="off" />
+            <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="right" data-content="Press Enter to finish a tag" title="Tags on this blog">?</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="id-publish">Publish</label>
+		<div class="col-sm-9">
+        {% if entry == None %}
+			<input type="checkbox" name="published" value="1" class="ace ace-switch ace-switch-5" checked />
+        {% else %}
+            <input type="checkbox" name="published" value="1" class="ace ace-switch ace-switch-5" {% if entry.published == 1 %}checked{% endif %} />
+        {% endif %}
+            <span class="lbl"></span>
+		</div>
+	</div>
+
+	<div class="clearfix form-actions">
+		<div class="col-md-offset-3 col-md-9">
+			<button class="btn btn-info" formaction="/admin/add_entry/{{ entry.id }}" formmethod="post">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				Submit
+			</button>
+            &nbsp; &nbsp; &nbsp;
+			{% if entry == None %}
+            <button class="btn" type="reset">
+				<i class="ace-icon fa fa-undo bigger-110"></i>
+				Reset
+			</button>
+            {% else %}
+            <a class="btn" href="/admin/list_entry/">
+				<i class="ace-icon fa fa-cancel bigger-110"></i>
+				Cancel
+			</a>
+            {% endif %}
+		</div>
+	</div>
+
+	<div class="hr hr-24"></div>
+</form>
+{% endblock %}
