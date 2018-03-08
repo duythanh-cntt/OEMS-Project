@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
     created = Column(DateTime, nullable=False)
     login = Column(DateTime, nullable=True)
     activated = Column(Integer, nullable=False, default=1)
-    entry = db.relationship('Entry', backref='user', lazy=True)
+    announcement = db.relationship('Announcement', backref='user', lazy=True)
 
     def __init__(self):
         self.username = 'admin'
