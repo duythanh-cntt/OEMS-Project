@@ -11,6 +11,7 @@ class Category(db.Model):
     level = Column(Integer, nullable=False, default=1)
     assignment = db.relationship('Assignment', backref='category', lazy=True)
     resources = db.relationship('Resources', backref='category', lazy=True)
+    announcement = db.relationship('Announcement', backref='category', lazy=True)
 
     def __init__(self):
         self.parent_id = 0
