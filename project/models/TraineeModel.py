@@ -35,22 +35,23 @@ class Trainee(UserMixin, db.Model):
     trainee_assignment = db.relationship('Trainee_Assignment', backref='trainee', lazy=True)
 
     def __init__(self):
-        self.username = 'ndthanh'
-        self.set_password('ndthanh123')
-        self.firstname = 'Nguyen Duy'
-        self.lastname = 'Thanh'
-        self.birthdate = '1980/04/16'
+        self.class_id = 1
+        self.username = 'truongbao'
+        self.set_password('truongbao123')
+        self.firstname = 'Truong'
+        self.lastname = 'Bao'
+        self.birthdate = ''
         self.gender = 1
-        self.email = 'ndthanh.cntt@gmail.com'
-        self.website = 'http://lekima.net'
-        self.facebook = 'https://www.facebook.com/duythanh.bluestar'
-        self.google_plus = 'https://plus.google.com/u/0/114990571875113632427'
-        self.mobile = '0918 907 325'
-        self.address = 'Da Nang City'
+        self.email = 'truongbao@gmail.com'
+        self.website = ''
+        self.facebook = ''
+        self.google_plus = ''
+        self.mobile = ''
+        self.address = 'Hue City'
         self.country = 'Viet Nam'
         self.nationality = 'Vietnamese'
-        self.avatar = 'https://nguyenduythanh.files.wordpress.com/2007/03/dsc_0081.jpg?w=500&h=333'
-        authcode = 'ndthanhndthanh123ndthanh.cntt@gmail.com' # (username + password + email).md5
+        self.avatar = ''
+        authcode = 'truongbaotruongbao123truongbao@gmail.com' # (username + password + email).md5
         self.authcode = Common.md5(authcode)
         self.introduction = 'Programmer'
         self.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

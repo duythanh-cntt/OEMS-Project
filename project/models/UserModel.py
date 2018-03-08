@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     salt = Column(String, nullable=True)
     firstname = Column(String(50), nullable=True)
     lastname = Column(String(50), nullable=True)
-    birthdate = Column(Date, nullable=True)
+    birthdate = Column(String(10), nullable=True)
     gender = Column(Integer, nullable=True)
     email = Column(String(50), nullable=False, unique=True)
     website = Column(String, nullable=True)
@@ -37,9 +37,9 @@ class User(UserMixin, db.Model):
     def __init__(self):
         self.username = 'admin'
         self.set_password('Admin@2018')
-        self.firstname = 'Nguyen Duy'
+        self.firstname = 'Administrator'
         self.lastname = 'Thanh'
-        self.birthdate = '1980-04-16'
+        self.birthdate = '1980/04/16'
         self.gender = 1
         self.email = 'ndthanh.cntt@gmail.com'
         self.website = 'http://lekima.net'

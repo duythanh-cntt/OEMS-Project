@@ -17,6 +17,7 @@ class Class(db.Model):
 
     def __init__(self):
         self.course_id = 1
+        self.teacher_id = 1
         self.code = 'class1'
         self.name = 'Class 1'
         self.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

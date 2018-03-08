@@ -37,25 +37,25 @@ class Teacher(UserMixin, db.Model):
     announcement = db.relationship('Announcement', backref='teacher', lazy=True)
 
     def __init__(self):
-        self.username = 'ndthanh'
-        self.set_password('ndthanh')
-        self.firstname = 'Nguyen Duy'
-        self.lastname = 'Thanh'
-        self.birthdate = '1980/04/16'
+        self.username = 'ducdan'
+        self.set_password('ducdan123')
+        self.firstname = 'Ho Duc'
+        self.lastname = 'Dan'
+        self.birthdate = ''
         self.gender = 1
-        self.email = 'ndthanh.cntt@gmail.com'
-        self.website = 'http://lekima.net'
-        self.degree = 'Master'
-        self.facebook = 'https://www.facebook.com/duythanh.bluestar'
-        self.google_plus = 'https://plus.google.com/u/0/114990571875113632427'
-        self.mobile = '0918 907 325'
-        self.address = 'Da Nang City'
+        self.email = 'ducdan@gmail.com'
+        self.website = ''
+        self.degree = ''
+        self.facebook = 'https://www.facebook.com/ho.ducdan'
+        self.google_plus = ''
+        self.mobile = ''
+        self.address = 'Ho Chi Minh City'
         self.country = 'Viet Nam'
         self.nationality = 'Vietnamese'
-        self.avatar = 'https://nguyenduythanh.files.wordpress.com/2007/03/dsc_0081.jpg?w=500&h=333'
-        authcode = 'ndthanhndthanh123ndthanh.cntt@gmail.com' # (username + password + email).md5
+        self.avatar = 'https://scontent.fsgn2-2.fna.fbcdn.net/v/t1.0-9/11924970_496125783891698_4814143228208474895_n.jpg?_nc_eui2=v1%3AAeG3bLWFLeSywX5HRvjvAXzjswd4M2zjucl5mwfUvMYmTrQtEobHjOzcvKa388FkXcVMJ860e38qFO5nTm1z8rLcDl1hg2vBw2aytLmiZb1Anw&oh=1ebf9b977041833c0627d323827bb43b&oe=5B4B33E6'
+        authcode = 'ducdanducdan123ducdan@gmail.com' # (username + password + email).md5
         self.authcode = Common.md5(authcode)
-        self.introduction = 'Programmer'
+        self.introduction = ''
         self.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def set_password(self, password):
