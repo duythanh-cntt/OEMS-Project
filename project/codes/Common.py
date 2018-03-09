@@ -39,3 +39,8 @@ class Common(object):
             filename = filename.replace(' ', '-')
 
         return filename
+
+    @staticmethod
+    def get_value_from_request_form_by_key(request, key):
+        value = request.form.get(key, None)
+        return value

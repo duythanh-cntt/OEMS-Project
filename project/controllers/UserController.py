@@ -1,9 +1,10 @@
 from project import app, db
 from hashlib import md5
 import datetime
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, flash
 from flask_login import login_user, current_user, logout_user, login_required, LoginManager
 from project.models.UserModel import User
+from project.models.RoleModel import Role
 from project.codes.Common import Common
 
 login_manager = LoginManager()
@@ -22,7 +23,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        print
         user = User.query.filter_by(username=username.lower(), password=md5(password.encode()).hexdigest()).first()
         if user:
             login_user(user=user)
@@ -67,6 +68,58 @@ def admin_user():
     page_title = 'List of users'
     user_list = User.get_all_users()
     return render_template('back-end/_user.html', page_title=page_title, user_list=user_list, account=account)
+
+@app.route('/user/create-user/')
+@app.route('/user/create-user/<user_id>')
+@login_required
+def create_user(user_id=None):
+    account = current_user.username
+    roles = Role.get_all_role()
+    page_title = 'Create update user'
+
+    # Get category to edit
+    if user_id is not None and user_id != '' and int(user_id) > 0:
+        user = User.get_user(user_id)
+        if user is None:
+            user = ''
+        else:
+            user.password = ''
+    else:
+        user = ''
+    return render_template('back-end/_user-create-update.html', page_title=page_title, roles=roles, account=account, user=user)
+
+
+@app.route('/user/add-user/', methods=['POST'])
+@app.route('/user/add-user/<user_id>', methods=['POST'])
+@login_required
+def add_user(user_id=None):
+    print(request.form)
+    username = Common.get_value_from_request_form_by_key(request, 'username')
+    password = Common.get_value_from_request_form_by_key(request, 'password')
+    email = Common.get_value_from_request_form_by_key(request, 'email')
+    role_id = Common.get_value_from_request_form_by_key(request, 'role_id')
+    introduction = Common.get_value_from_request_form_by_key(request, 'introduction')
+    firstname = Common.get_value_from_request_form_by_key(request, 'firstname')
+    lastname = Common.get_value_from_request_form_by_key(request, 'lastname')
+    address = Common.get_value_from_request_form_by_key(request, 'address')
+    nationality = Common.get_value_from_request_form_by_key(request, 'nationality')
+
+    print(username)
+    print(password)
+    print(email)
+    print(role_id)
+    print(introduction)
+
+    if user_id is not None and user_id != '' and int(user_id) > 0:
+        user = User.query.filter(User.id == user_id).first()
+        if user:
+            User.update_user(user_id, username, password, email, role_id, introduction, firstname, lastname, address, nationality)
+            flash('User has been updated successfully.', 'success')
+    else:
+        db.session.add(User.insert_user(username, password, email, role_id, introduction, firstname, lastname, address, nationality))
+        flash('User has been created successfully.', 'success')
+    db.session.commit()
+    return redirect('/user/')
 
 
 @app.route('/profile/')

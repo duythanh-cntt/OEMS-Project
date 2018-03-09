@@ -26,11 +26,10 @@ class Role(db.Model):
         return obj
 
     @staticmethod
-    def update_role(role_id, id, name):
+    def update_role(role_id, name):
         obj = Role.get_role(role_id)
-        obj.id = id
         obj.name = name
 
-    # @staticmethod
-    def get_all_role(self):
+    @staticmethod
+    def get_all_role():
         return Role.query.filter().order_by(Role.id.asc()).all()

@@ -65,6 +65,12 @@ class User(UserMixin, db.Model):
     def set_password(self, password):
         self.password = md5(password.encode()).hexdigest()
 
+    def get_str_value(self, str):
+        if str == None:
+            return ''
+        else:
+            return str
+
     @staticmethod
     def profile(username):
         user = User.query.filter_by(username=username).first()
@@ -74,25 +80,47 @@ class User(UserMixin, db.Model):
             return None
 
     @staticmethod
-    def insert_user(username, password, email, role_id, authcode, introduction, activated):
+    def insert_user(username, password, email, role_id, introduction, firstname, lastname, address, nationality):
         obj = User()
-        obj.username = username
+        obj.username = username.lower()
         obj.set_password(password)
-        obj.firstname = None
-        obj.lastname = None
+        obj.firstname = obj.get_str_value(firstname)
+        obj.lastname = obj.get_str_value(lastname)
         obj.birthdate = None
         obj.gender = None
-        obj.email = email
+        obj.email = obj.get_str_value(email)
         obj.website = None
         obj.mobile = None
-        obj.address = None
+        obj.address = obj.get_str_value(address)
         obj.country = None
-        obj.nationality = None
+        obj.nationality = obj.get_str_value(nationality)
         obj.role_id = role_id
-        obj.authcode = authcode # Ham set authen nen duoc de o day
-        obj.introduction = introduction
+        #obj.authcode = authcode # Ham set authen nen duoc de o day
+        obj.introduction = obj.get_str_value(introduction)
         obj.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        obj.activated = activated
+        obj.activated = 1
+        return obj
+
+    @staticmethod
+    def update_user(user_id, username, password, email, role_id, introduction, firstname, lastname, address, nationality):
+        obj = User.get_user(user_id)
+        obj.username = username.lower()
+        obj.set_password(password)
+        obj.firstname = obj.get_str_value(firstname)
+        obj.lastname = obj.get_str_value(lastname)
+        obj.birthdate = None
+        obj.gender = None
+        obj.email = obj.get_str_value(email)
+        obj.website = None
+        obj.mobile = None
+        obj.address = obj.get_str_value(address)
+        obj.country = None
+        obj.nationality = obj.get_str_value(nationality)
+        obj.role_id = role_id
+        # obj.authcode = authcode # Ham set authen nen duoc de o day
+        obj.introduction = obj.get_str_value(introduction)
+        obj.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        obj.activated = 1
         return obj
 
     # Kiem tra username da ton tai hay chua

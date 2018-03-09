@@ -20,6 +20,7 @@
 					<th class="center">Created</th>
 					<th class="center">Login</th>
 					<th class="center">Activation</th>
+					<th class="center">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -59,7 +60,7 @@
                             {{ item.nationality }}
                         {% endif %}
                     </td>
-					<td>{{ item.role }}</td>
+					<td>{{ item.role.name }}</td>
 					<td>{{ item.created }}</td>
 					<td>
                         {% if item.login != None and item.login != '' %}
@@ -67,6 +68,10 @@
                         {% endif %}
                     </td>
 					<td>{{ item.activated }}</td>
+					<td>
+						<a href="/user/create-user/{{ item.id }}" target="_blank">Update
+						</a>
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>
