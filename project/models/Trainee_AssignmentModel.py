@@ -2,13 +2,12 @@ from project import db
 from sqlalchemy import Column, Integer, Float, String, Date, DateTime, ForeignKey
 import datetime
 from flask_login import current_user
-from project.models.TraineeModel import Trainee
 from project.models.AssignmentModel import Assignment
 
 
 class Trainee_Assignment(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    trainee_id = Column(Integer, ForeignKey('trainee.id'), nullable=False)
+    trainee_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     assignment_id = Column(Integer, ForeignKey('assignment.id'), nullable=False)
     submission_date = Column(Date, nullable=True)
     link = Column(String, nullable=True)

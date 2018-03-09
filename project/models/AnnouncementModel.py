@@ -3,14 +3,13 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 import datetime
 from flask_login import current_user
 from project.models.UserModel import User
-from project.models.TeacherModel import Teacher
 from project.models.CategoryModel import Category
 
 
 class Announcement(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    teacher_id = Column(Integer, ForeignKey('teacher.id'), nullable=False)
+    #user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    teacher_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     title = Column(String, nullable=False)
     slug = Column(String, nullable=False, unique=True)
@@ -26,7 +25,7 @@ class Announcement(db.Model):
     published = Column(Integer, nullable=False, default=1)
 
     def __init__(self):
-        self.user_id = 1
+        #self.user_id = 1
         self.teacher_id = 1
         self.category_id = 1
         self.title = 'The first post'
@@ -43,9 +42,9 @@ class Announcement(db.Model):
         self.published = 1
 
     @staticmethod
-    def insert_announcement(user_id, teacher_id, cat_id, title, slug, summary, content, thumbnail, image, tags, published):
+    def insert_announcement(teacher_id, cat_id, title, slug, summary, content, thumbnail, image, tags, published):
         obj = Announcement()
-        obj.user_id = user_id
+        #obj.user_id = user_id
         obj.teacher_id = teacher_id
         obj.category_id = cat_id
         obj.title = title
@@ -63,9 +62,9 @@ class Announcement(db.Model):
         return obj
 
     @staticmethod
-    def update_announcement(id, user_id, teacher_id, cat_id, title, slug, summary, content, thumbnail, image, tags, published):
+    def update_announcement(id, teacher_id, cat_id, title, slug, summary, content, thumbnail, image, tags, published):
         obj = Announcement.get_announcement(id)
-        obj.user_id = user_id
+        #obj.user_id = user_id
         obj.teacher_id = teacher_id
         obj.category_id = cat_id
         obj.title = title
@@ -107,7 +106,7 @@ class Announcement(db.Model):
 
     @staticmethod
     def get_announcement_by_teacher(username, published=None):
-        user = Teacher.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         if user:
             if published is None:
                 return Announcement.query.filter(Announcement.teacher_id == user.id).order_by(Announcement.id.desc()).all()

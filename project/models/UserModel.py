@@ -2,7 +2,7 @@ from project import db
 import datetime
 from hashlib import md5
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String, Date, DateTime
+from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey
 from project.codes.Common import Common
 
 
@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     gender = Column(Integer, nullable=True)
     email = Column(String(50), nullable=False, unique=True)
     website = Column(String, nullable=True)
+    degree = Column(String, nullable=True)
     facebook = Column(String, nullable=True)
     twitter = Column(String, nullable=True)
     google_plus = Column(String, nullable=True)
@@ -26,13 +27,20 @@ class User(UserMixin, db.Model):
     country = Column(String(100), nullable=True)
     nationality = Column(String(100), nullable=True)
     avatar = Column(String, nullable=True)
-    role = Column(String(50), nullable=True)
     authcode = Column(String, nullable=True)
     introduction = Column(String, nullable=True)
     created = Column(DateTime, nullable=False)
     login = Column(DateTime, nullable=True)
+    attending = Column(Integer, nullable=False, default=1)
     activated = Column(Integer, nullable=False, default=1)
+    role_id = Column(Integer, ForeignKey('role.id'))
+    role = db.relationship('Role', backref='user', lazy=True)
+    #class_id = Column(Integer, ForeignKey('class.id'), nullable=False) #Trainee
+    xclass = db.relationship('Class', backref='user', lazy=True)
+    resources = db.relationship('Resources', backref='user', lazy=True)
+    assignment = db.relationship('Assignment', backref='user', lazy=True)
     announcement = db.relationship('Announcement', backref='user', lazy=True)
+    trainee_assignment = db.relationship('Trainee_Assignment', backref='trainee', lazy=True)
 
     def __init__(self):
         self.username = 'admin'
@@ -48,7 +56,7 @@ class User(UserMixin, db.Model):
         self.country = 'Viet Nam'
         self.nationality = 'Vietnamese'
         self.avatar = 'https://nguyenduythanh.files.wordpress.com/2007/03/dsc_0081.jpg?w=500&h=333'
-        self.role = 'Admin'
+        self.role_id = 1
         authcode = 'adminAdmin@2018ndthanh.cntt@gmail.com'
         self.authcode = Common.md5(authcode) # (username + password + email).md5
         self.introduction = 'Administrator of OEMS.'
@@ -66,7 +74,7 @@ class User(UserMixin, db.Model):
             return None
 
     @staticmethod
-    def insert_user(username, password, email, role, authcode, introduction, activated):
+    def insert_user(username, password, email, role_id, authcode, introduction, activated):
         obj = User()
         obj.username = username
         obj.set_password(password)
@@ -80,7 +88,7 @@ class User(UserMixin, db.Model):
         obj.address = None
         obj.country = None
         obj.nationality = None
-        obj.role = role
+        obj.role_id = role_id
         obj.authcode = authcode # Ham set authen nen duoc de o day
         obj.introduction = introduction
         obj.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

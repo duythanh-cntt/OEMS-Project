@@ -1,13 +1,13 @@
 from project import db
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 import datetime
-from project.models.TeacherModel import Teacher
+from project.models.UserModel import User
 from project.models.CategoryModel import Category
 
 
 class Resources(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    teacher_id = Column(Integer, ForeignKey('teacher.id'), nullable=False)
+    teacher_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     name = Column(String, nullable=False)
     link = Column(String, nullable=False)
@@ -68,7 +68,7 @@ class Resources(db.Model):
 
     @staticmethod
     def get_resources_by_teacher(username, status=None):
-        user = Teacher.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         if user:
             if status is None:
                 return Resources.query.filter(Resources.teacher_id == user.id).order_by(Resources.id.desc()).all()

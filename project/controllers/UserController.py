@@ -9,11 +9,12 @@ from project.codes.Common import Common
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 @login_manager.user_loader
 def load_user(username):
-    return User.query.get(username)
-
+    if(username):
+        return User.query.get(username)
+    else:
+        return None
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
