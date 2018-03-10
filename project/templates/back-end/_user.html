@@ -20,6 +20,7 @@
 					<th class="center">Created</th>
 					<th class="center">Login</th>
 					<th class="center">Activation</th>
+					<th class="center" width="80">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,7 +32,7 @@
 						<span class="lbl"></span>
 						</label>
 					</td>
-					<td>
+					<td width="150">
                         {% if item.avatar != None and item.avatar != '' %}
 						<a href="#"><img src="{{ item.avatar }}" class="img img-responsive center-block" /></a><br />
                         {% endif %}
@@ -59,7 +60,7 @@
                             {{ item.nationality }}
                         {% endif %}
                     </td>
-					<td>{{ item.role }}</td>
+					<td>{{ item.role.name }}</td>
 					<td>{{ item.created }}</td>
 					<td>
                         {% if item.login != None and item.login != '' %}
@@ -67,6 +68,47 @@
                         {% endif %}
                     </td>
 					<td>{{ item.activated }}</td>
+					<td class="center">
+						<div class="hidden-sm hidden-xs btn-group">
+							<a class="btn btn-xs btn-info" href="/user/create-user/{{ item.id }}" title="Edit this announcement">
+								<i class="ace-icon fa fa-pencil bigger-120"></i>
+							</a>
+
+							<a class="btn btn-xs btn-danger" href="/delete_user?id={{ item.id }}" title="Delete this announcement">
+								<i class="ace-icon fa fa-trash-o bigger-120"></i>
+							</a>
+						</div>
+						<div class="hidden-md hidden-lg">
+							<div class="inline pos-rel">
+								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+								<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+								</button>
+								<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+									<li>
+										<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+										<span class="blue">
+										<i class="ace-icon fa fa-search-plus bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+										<span class="green">
+										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+										<span class="red">
+										<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>

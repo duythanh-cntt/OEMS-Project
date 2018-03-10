@@ -1,0 +1,81 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-username"> User Name(*) </label>
+		<div class="col-sm-9">
+			<input type="text" name="username" id="user-username" value="{{ user.username }}" placeholder="User Name" class="col-xs-10 col-sm-5" required />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-password"> Password(*) </label>
+		<div class="col-sm-9">
+			<input type="password" name="password" id="user-password" value="{{ user.password }}" placeholder="Password" class="col-xs-10 col-sm-5" required />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-firstname"> Firstname(*) </label>
+		<div class="col-sm-9">
+			<input type="text" name="firstname" id="user-firstname" value="{{ user.firstname }}" placeholder="Firstname" class="col-xs-10 col-sm-5" required />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-lastname"> Lastname(*) </label>
+		<div class="col-sm-9">
+			<input type="text" name="lastname" id="user-lastname" value="{{ user.lastname }}" placeholder="Lastname" class="col-xs-10 col-sm-5" required />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-role-id"> Role(*) </label>
+		<div class="col-sm-9">
+			<select class="col-xs-10 col-sm-5" name="role_id" id="user-role-id" data-placeholder="Choose a role...">
+				<option value="0"></option>
+				{% for item in roles %}
+				<option style="font-weight: bold" value="{{ item.id }}" {% if item.id == user.role_id %}selected="selected"{% endif %}>{{ item.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-email"> Email </label>
+		<div class="col-sm-9">
+			<input type="text" name="email" id="user-email" value="{{ user.email }}" placeholder="Email" class="col-xs-10 col-sm-5" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-introduction"> Introduction </label>
+		<div class="col-sm-9">
+			<input type="text" name="introduction" id="user-introduction" value="{{ user.introduction }}" placeholder="Introduction" class="col-xs-10 col-sm-5" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-address"> Address </label>
+		<div class="col-sm-9">
+			<input type="text" name="address" id="user-address" value="{{ user.address }}" placeholder="Address" class="col-xs-10 col-sm-5" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="user-nationality"> Nationality </label>
+		<div class="col-sm-9">
+			<input type="text" name="nationality" id="user-nationality" value="{{ user.nationality }}" placeholder="Nationality" class="col-xs-10 col-sm-5" />
+		</div>
+	</div>
+	<div class="clearfix form-actions">
+		<div class="col-md-offset-3 col-md-9">
+			<button formaction="/user/add-user/{{user.id}}" formmethod="post" class="btn btn-info">
+			<i class="ace-icon fa fa-check bigger-110"></i>
+			Submit
+			</button> &nbsp; &nbsp; &nbsp;
+			{% if user == '' %}
+			<button class="btn" type="reset">
+			<i class="ace-icon fa fa-undo bigger-110"></i>
+			Reset
+			</button> {% else %}
+			<a class="btn" href="/user/">
+			<i class="ace-icon fa fa-cancel bigger-110"></i>
+			Cancel
+			</a> {% endif %}
+		</div>
+	</div>
+</form>
+{% endblock %}
