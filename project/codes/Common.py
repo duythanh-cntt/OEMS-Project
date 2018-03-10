@@ -39,3 +39,14 @@ class Common(object):
             filename = filename.replace(' ', '-')
 
         return filename
+
+    @staticmethod
+    def get_str_value(str):
+        if str is None:
+            return ''
+        else:
+            return str
+
+    @staticmethod
+    def get_value_from_request_form_by_key(request, key):
+        return request.form.get(key, None)
