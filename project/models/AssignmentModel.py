@@ -2,13 +2,13 @@ from project import db
 from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey
 import datetime
 from flask_login import current_user
-from project.models.TeacherModel import Teacher
+from project.models.UserModel import User
 from project.models.CategoryModel import Category
 
 
 class Assignment(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    teacher_id = Column(Integer, ForeignKey('teacher.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     name = Column(String, nullable=False)
     link = Column(String, nullable=True)
@@ -21,7 +21,7 @@ class Assignment(db.Model):
     trainee_assignment = db.relationship('Trainee_Assignment', backref='assignment', lazy=True)
 
     def __init__(self):
-        self.teacher_id = 1
+        self.user_id = 1
         self.category_id = 1
         self.name = 'Bartender'
         self.link = 'https://classroom.google.com/u/0/c/OTM2MzY2NDMwM1pa/a/OTM4MjA2MzE0MVpa/details'
@@ -33,9 +33,9 @@ class Assignment(db.Model):
         self.status = 1
 
     @staticmethod
-    def insert_assignment(teacher_id, cat_id, name, link, description, deadline, tags, status):
+    def insert_assignment(user_id, cat_id, name, link, description, deadline, tags, status):
         obj = Assignment()
-        obj.teacher_id = teacher_id
+        obj.user_id = user_id
         obj.category_id = cat_id
         obj.name = name
         obj.link = link
@@ -48,9 +48,9 @@ class Assignment(db.Model):
         return obj
 
     @staticmethod
-    def update_assignment(id, teacher_id, cat_id, name, link, description, deadline, tags, status):
+    def update_assignment(id, user_id, cat_id, name, link, description, deadline, tags, status):
         obj = Assignment.get_assignment(id)
-        obj.teacher_id = teacher_id
+        obj.user_id = user_id
         obj.category_id = cat_id
         obj.name = name
         obj.link = link
@@ -72,13 +72,13 @@ class Assignment(db.Model):
             return None
 
     @staticmethod
-    def get_assignment_by_teacher(username, status=None):
-        user = Teacher.query.filter_by(username=username).first()
+    def get_assignment_by_user(username, status=None):
+        user = User.query.filter_by(username=username).first()
         if user:
             if status is None:
-                return Assignment.query.filter(Assignment.teacher_id == user.id).order_by(Assignment.id.desc()).all()
+                return Assignment.query.filter(Assignment.user_id == user.id).order_by(Assignment.id.desc()).all()
             else:
-                return Assignment.query.filter(Assignment.teacher_id == user.id, Assignment.status == status).order_by(Assignment.id.desc()).all()
+                return Assignment.query.filter(Assignment.user_id == user.id, Assignment.status == status).order_by(Assignment.id.desc()).all()
         else:
             return None
 

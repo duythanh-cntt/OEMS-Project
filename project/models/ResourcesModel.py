@@ -1,13 +1,13 @@
 from project import db
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 import datetime
-from project.models.TeacherModel import Teacher
+from project.models.UserModel import User
 from project.models.CategoryModel import Category
 
 
 class Resources(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    teacher_id = Column(Integer, ForeignKey('teacher.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     name = Column(String, nullable=False)
     link = Column(String, nullable=False)
@@ -19,7 +19,7 @@ class Resources(db.Model):
     status = Column(Integer, nullable=False, default=1)
 
     def __init__(self):
-        self.teacher_id = 1
+        self.user_id = 1
         self.category_id = 1
         self.name = 'Install Windows from a USB Flash Drive'
         self.link = 'https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive'
@@ -30,9 +30,9 @@ class Resources(db.Model):
         self.status = 1
 
     @staticmethod
-    def insert_resources(teacher_id, cat_id, name, link, description, tags, status):
+    def insert_resources(user_id, cat_id, name, link, description, tags, status):
         obj = Resources()
-        obj.teacher_id = teacher_id
+        obj.user_id = user_id
         obj.category_id = cat_id
         obj.name = name
         obj.link = link
@@ -44,9 +44,9 @@ class Resources(db.Model):
         return obj
 
     @staticmethod
-    def update_resources(id, teacher_id, cat_id, name, link, description, tags, status):
+    def update_resources(id, user_id, cat_id, name, link, description, tags, status):
         obj = Resources.get_resources(id)
-        obj.teacher_id = teacher_id
+        obj.user_id = user_id
         obj.category_id = cat_id
         obj.name = name
         obj.link = link
@@ -68,12 +68,12 @@ class Resources(db.Model):
 
     @staticmethod
     def get_resources_by_teacher(username, status=None):
-        user = Teacher.query.filter_by(username=username).first()
+        user = User.query.filter(username=username, role_id=2).first()
         if user:
             if status is None:
-                return Resources.query.filter(Resources.teacher_id == user.id).order_by(Resources.id.desc()).all()
+                return Resources.query.filter(Resources.user_id == user.id).order_by(Resources.id.desc()).all()
             else:
-                return Resources.query.filter(Resources.teacher_id == user.id, Resources.status == status).order_by(Resources.id.desc()).all()
+                return Resources.query.filter(Resources.user_id == user.id, Resources.status == status).order_by(Resources.id.desc()).all()
         else:
             return None
 
