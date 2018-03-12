@@ -9,7 +9,7 @@
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="/static/back-end/assets/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/static/back-end/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-		
+
 		<!-- page specific plugin styles -->
 		<link rel="stylesheet" href="/static/back-end/assets/css/jquery-ui.custom.min.css" />
 		<link rel="stylesheet" href="/static/back-end/assets/css/chosen.min.css" />
@@ -23,7 +23,7 @@
 		<link rel="stylesheet" href="/static/back-end/assets/css/jquery.gritter.min.css" />
 		<link rel="stylesheet" href="/static/back-end/assets/css/select2.min.css" />
 		<link rel="stylesheet" href="/static/back-end/assets/css/bootstrap-editable.min.css" />
-		
+
 		<!-- text fonts -->
 		<link rel="stylesheet" href="/static/back-end/assets/css/fonts.googleapis.com.css" />
 		<!-- ace styles -->
@@ -367,6 +367,7 @@
 						</a>
 						<b class="arrow"></b>
 					</li>
+					{% if current_user != None and current_user.role_id != 3 %}
 					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-users"></i>
@@ -382,6 +383,66 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
+							<li class="">
+								<a href="/user/create-user">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new User
+								</a>
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+					{% endif %}
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-users"></i>
+							<span class="menu-text">Courses</span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<li class="">
+								<a href="/course/">
+									<i class="menu-icon fa fa-caret-right"></i>
+									List of courses
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% if current_user != None and current_user.role_id != 3 %}
+							<li class="">
+								<a href="/course/create-course">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new Course
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% endif %}
+						</ul>
+					</li>
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-users"></i>
+							<span class="menu-text">Class</span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<li class="">
+								<a href="/class/">
+									<i class="menu-icon fa fa-caret-right"></i>
+									List of classes
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% if current_user != None and current_user.role_id != 3 %}
+							<li class="">
+								<a href="/class/create-class">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new Class
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% endif %}
 						</ul>
 					</li>
 					<li class="">
@@ -709,7 +770,7 @@
 							</h1>
 						</div>
 						<!-- /.page-header -->
-						
+
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
@@ -791,11 +852,11 @@
 		<script src="/static/back-end/assets/js/ace-editable.min.js"></script>
 
 		<script src="//cdn.ckeditor.com/4.5.3/standard/ckeditor.js"></script>
-		
+
 		<!-- ace scripts -->
 		<script src="/static/back-end/assets/js/ace-elements.min.js"></script>
 		<script src="/static/back-end/assets/js/ace.min.js"></script>
-		
+
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 			// Tích hợp CKEditor
@@ -848,7 +909,7 @@
 								});
 							})
 						}).trigger('resize.chosen');
-					
+
 					//resize chosen on sidebar collapse/expand
 					$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
 						if (event_name != 'sidebar_collapsed') return;
@@ -861,9 +922,9 @@
 					});
 					*/
 				}
-				
+
 				$('#cat-order').ace_spinner({value:1, min:1, step:1, btn_up_class:'btn-info', btn_down_class:'btn-info'})
-				
+
 				$('#id-image').ace_file_input({
 					no_file: 'No file ...',
 					btn_choose: 'Choose ...',
@@ -876,7 +937,7 @@
 					//onchange: ''
 					//
 				});
-				
+
 				// Tooltip
 				$('[data-rel=popover]').popover({container:'body'});
 
@@ -898,11 +959,11 @@
 						*/
 					  }
 					)
-			
+
 					//programmatically add/remove a tag
 					var $tag_obj = $('#id-tags').data('tag');
 					//$tag_obj.add('Programmatically Added');
-					
+
 					var index = $tag_obj.inValues('some tag');
 					$tag_obj.remove(index);
 				}
@@ -913,7 +974,7 @@
 				}
 
 				$('a[data-original-title]').tooltip();
-				
+
 			})
 		</script>
 	</body>

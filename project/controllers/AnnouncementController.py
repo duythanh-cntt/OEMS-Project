@@ -20,7 +20,7 @@ def form_announcement(id=None):
         announcement = None
         page_title = 'Add new announcement'
     cat_list = Category.get_category_list()
-    return render_template('back-end/_announcement-form.html', page_title=page_title, cat_list=cat_list, announcement=announcement, account=current_user.username)
+    return render_template('back-end/_announcement-form.html', page_title=page_title, cat_list=cat_list, announcement=announcement, account=current_user.username, current_user=current_user)
 
 
 @app.route('/add_announcement/', methods=['POST'])
@@ -71,4 +71,4 @@ def delete_announcement():
 def list_announcement():
     page_title = 'List of announcements'
     announcement_list = Announcement.get_announcement_by_user_logged_in()
-    return render_template('back-end/_announcement-table.html', page_title=page_title, announcement_list=announcement_list, account=current_user.username)
+    return render_template('back-end/_announcement-table.html', page_title=page_title, announcement_list=announcement_list, account=current_user.username, current_user=current_user)

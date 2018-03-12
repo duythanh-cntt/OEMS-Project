@@ -1,0 +1,80 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-12">
+		<table id="simple-table" class="table  table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</th>
+					<th class="center">Course Code</th>
+					<th class="center">Course name</th>
+					<th class="center" width="80">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in course_list %}
+				<tr>
+					<td class="center">
+						<label class="pos-rel">
+						<input type="checkbox" class="ace" />
+						<span class="lbl"></span>
+						</label>
+					</td>
+					<td>{{ item.code }}</td>
+					<td>{{ item.name }}</td>
+					<td class="center">
+						<div class="hidden-sm hidden-xs btn-group">
+							{% if current_user != None and current_user.role_id != 3 %}
+							<a class="btn btn-xs btn-info" href="/course/create-course/{{ item.id }}" title="Edit">
+								<i class="ace-icon fa fa-pencil bigger-120"></i>
+							</a>
+
+							<a class="btn btn-xs btn-danger" href="/delete_course?id={{ item.id }}" title="Delete">
+								<i class="ace-icon fa fa-trash-o bigger-120"></i>
+							</a>
+							{% endif %}
+						</div>
+						<div class="hidden-md hidden-lg">
+							<div class="inline pos-rel">
+								<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+								<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+								</button>
+								<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+									<li>
+										<a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+										<span class="blue">
+										<i class="ace-icon fa fa-search-plus bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+										<span class="green">
+										<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+										<span class="red">
+										<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<!-- /.span -->
+</div>
+{% endblock %}

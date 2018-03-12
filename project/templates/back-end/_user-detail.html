@@ -1,0 +1,73 @@
+{% extends "back-end/layout/_layout-form.html" %}
+{% block content %}
+<form class="form-horizontal" role="form">
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Avatar: </label>
+		<div class="col-sm-9">
+      {% if user.avatar != None and user.avatar != '' %}
+        <a href="#"><img src="{{ user.avatar }}" class="img img-responsive center-block" /></a><br />
+      {% endif %}
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> User Name: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {{ user.username }}
+      </label>
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Full Name: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {% if user.firstname != None and user.firstname != '' %}
+            {{ user.firstname }}
+        {% endif %}
+        {% if user.lastname != None and user.lastname != '' %}
+            {{ user.lastname }}
+        {% endif %}
+      </label>
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Email: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {{ user.email }}
+      </label>
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Address: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {% if user.address != None and user.address != '' %}
+            {{ user.address }}
+        {% endif %}
+        {% if user.country != None and user.country != '' %}
+        - {{ user.country }}
+        {% endif %}
+      </label>
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Nationality: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {% if user.nationality != None and user.nationality != '' %}
+            {{ user.nationality }}
+        {% endif %}
+      </label>
+		</div>
+	</div>
+  <div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> Role: </label>
+		<div class="col-sm-9">
+			<label class="control-label no-padding-right">
+        {{ user.role.name }}
+      </label>
+		</div>
+	</div>
+</form>
+{% endblock %}

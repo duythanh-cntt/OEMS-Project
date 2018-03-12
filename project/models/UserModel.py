@@ -1,7 +1,7 @@
 from project import db
 import datetime
 from hashlib import md5
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey
 from project.codes.Common import Common
 
@@ -31,6 +31,7 @@ class User(UserMixin, db.Model):
     authcode = Column(String, nullable=True) # Mã xác thực để kích hoạt tài khoản (để dự trữ, chưa dùng tới)
     introduction = Column(String, nullable=True)
     created = Column(DateTime, nullable=False)
+    created_by = Column(String(50), nullable=False)
     login = Column(DateTime, nullable=True)
     attending = Column(Integer, nullable=True)
     activated = Column(Integer, nullable=False, default=1)
@@ -78,6 +79,7 @@ class User(UserMixin, db.Model):
         self.authcode = Common.md5(authcode) # (username + password + email).md5
         self.introduction = 'Administrator of OEMS.'
         self.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.created_by = 'admin'
 
     def set_password(self, password):
         self.password = md5(password.encode()).hexdigest()
@@ -89,6 +91,7 @@ class User(UserMixin, db.Model):
             return user
         else:
             return None
+
 
     @staticmethod
     def insert_user(role_id, username, password, firstname, lastname, email, address, nationality, introduction, authcode, activated):
@@ -108,8 +111,10 @@ class User(UserMixin, db.Model):
         obj.nationality = Common.get_str_value(nationality)
         obj.avatar = None
         obj.introduction = Common.get_str_value(introduction)
+        obj.attending = 1
         obj.authcode = authcode # Ham set authen nen duoc de o day
         obj.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        obj.created_by = current_user.username
         obj.activated = activated
         return obj
 
@@ -154,12 +159,21 @@ class User(UserMixin, db.Model):
             return False
 
     @staticmethod
-    def get_user(user_id):
-        user = User.query.filter_by(id=user_id).first()
+    def get_user(id):
+        user = User.query.filter_by(id=id).first()
         if user:
             return user
         else:
             return None
+
+    @staticmethod
+    def get_all_teacher():
+        teachers = User.query.filter_by(role_id=2).order_by(User.username.asc()).all()
+        if teachers:
+            return teachers
+        else:
+            return None
+
 
     @staticmethod
     def get_all_users():

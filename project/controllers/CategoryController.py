@@ -20,7 +20,7 @@ def category(cat_id=None):
             cat = ''
     else:
         cat = ''
-    return render_template('back-end/_category.html', page_title=page_title, cat_list=cat_list, cat=cat, account=account)
+    return render_template('back-end/_category.html', page_title=page_title, cat_list=cat_list, cat=cat, account=account, current_user=current_user)
 
 @app.route('/add_category/', methods=['POST'])
 @app.route('/add_category/<cat_id>', methods=['POST'])

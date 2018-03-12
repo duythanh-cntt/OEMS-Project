@@ -353,6 +353,7 @@
 						</a>
 						<b class="arrow"></b>
 					</li>
+					{% if current_user != None and current_user.role_id != 3 %}
 					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-users"></i>
@@ -368,6 +369,66 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
+							<li class="">
+								<a href="/user/create-user">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new User
+								</a>
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+					{% endif %}
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-users"></i>
+							<span class="menu-text">Course</span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<li class="">
+								<a href="/course/">
+									<i class="menu-icon fa fa-caret-right"></i>
+									List of courses
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% if current_user != None and current_user.role_id != 3 %}
+							<li class="">
+								<a href="/course/create-course">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new Course
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% endif %}
+						</ul>
+					</li>
+					<li class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-users"></i>
+							<span class="menu-text">Class</span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<li class="">
+								<a href="/class/">
+									<i class="menu-icon fa fa-caret-right"></i>
+									List of classes
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% if current_user != None and current_user.role_id != 3 %}
+							<li class="">
+								<a href="/class/create-class">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Create new Class
+								</a>
+								<b class="arrow"></b>
+							</li>
+							{% endif %}
 						</ul>
 					</li>
 					<li class="">
@@ -695,7 +756,7 @@
 							</h1>
 						</div>
 						<!-- /.page-header -->
-						
+
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->

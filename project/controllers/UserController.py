@@ -22,6 +22,7 @@ def load_user(username):
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     message = ''
+    user = ''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -37,7 +38,7 @@ def login():
     # Kiem tra quyen
     if current_user.is_authenticated:
         return redirect('/')
-    return render_template('back-end/login.html', message=message)
+    return render_template('back-end/login.html', message=message, user=user, current_user=current_user)
 
 
 @app.route('/logout/')
@@ -76,7 +77,7 @@ def admin_user():
     account = current_user.username
     page_title = 'List of users'
     user_list = User.get_all_users()
-    return render_template('back-end/_user.html', page_title=page_title, user_list=user_list, account=account)
+    return render_template('back-end/_user.html', page_title=page_title, user_list=user_list, account=account, current_user=current_user)
 
 
 @app.route('/profile/')
@@ -98,6 +99,18 @@ def create_user(user_id=None):
     roles = Role.get_all_role()
     page_title = 'Create user'
 
+    print("CREATE USER TYPE: " + str(type(roles)))
+
+    roletmp = []
+    for item in roles:
+        if current_user.role_id == 1: ##admin
+            if item.id != 3:
+                roletmp.append(item)
+        elif current_user.role_id == 2: ##teacher
+            if item.id == 3:
+                roletmp.append(item)
+    roles = roletmp
+
     if user_id is not None and user_id != '' and int(user_id) > 0:
         if User.get_user(user_id) is not None:
             user = User.get_user(user_id)
@@ -108,7 +121,7 @@ def create_user(user_id=None):
             # redirect('/user/')
     else:
         user = ''
-    return render_template('back-end/_user-create-update.html', page_title=page_title, roles=roles, account=account, user=user)
+    return render_template('back-end/_user-create-update.html', page_title=page_title, current_user=current_user, roles=roles, account=account, user=user)
 
 
 @app.route('/user/add-user/', methods=['POST'])
@@ -140,15 +153,28 @@ def add_user(user_id=None):
     return redirect('/user/')
 
 
+@app.route('/user/detail-user/<user_id>')
+@login_required
+def detail_user(user_id=None):
+    page_title = 'detail user'
+    user = ''
+    if user_id is not None and user_id != '' and int(user_id) > 0:
+        user = User.query.filter(User.id == user_id).first()
+
+    return render_template('back-end/_user-detail.html', page_title=page_title, user=user, current_user=current_user)
+
+
 @app.route('/delete_user/', methods=['GET'])
 @login_required
 def delete_user():
     user_id = request.args.get('id')
+    print("DELETE USER: " + user_id)
     if user_id is not None and user_id != '' and int(user_id) > 0:
-        if User.get_user(user_id) is not None:
+        user = User.get_user(user_id)
+        print("DELETE USER FULL: " + str(user.id))
+        if user is not None:
             # Nên kiểm tra quan hệ 1 - n trước khi xóa
-
-            db.session.delete(User.get_user(user_id))
+            db.session.delete(user)
             db.session.commit()
-    return redirect('/admin/user/')
+    return redirect('/user/')
 

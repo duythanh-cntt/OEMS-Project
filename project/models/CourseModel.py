@@ -1,16 +1,19 @@
 from project import db
 from sqlalchemy import Column, Integer, String
+from flask_login import current_user
 
 
 class Course(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     code = Column(String(50), nullable=False, unique=True)
     name = Column(String(100), nullable=False)
-    xclass = db.relationship('Class', backref='course', lazy=True)
+    created_by = Column(String(50), nullable=False)
+    # xclass = db.relationship('Class', backref='course', lazy=True)
 
     def __init__(self):
         self.code = 'python'
         self.name = 'Python course'
+        self.created_by = 'admin'
 
     @staticmethod
     def get_course(course_id):
@@ -25,6 +28,7 @@ class Course(db.Model):
         obj = Course()
         obj.code = code
         obj.name = name
+        obj.created_by = current_user.username
         return obj
 
     @staticmethod
@@ -33,6 +37,6 @@ class Course(db.Model):
         obj.code = code
         obj.name = name
 
-    # @staticmethod
-    def get_all_course(self):
+    @staticmethod
+    def get_all_course():
         return Course.query.filter().order_by(Course.code.asc()).all()

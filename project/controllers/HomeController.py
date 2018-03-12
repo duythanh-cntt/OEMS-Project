@@ -16,7 +16,7 @@ from project.models.Trainee_AssignmentModel import Trainee_Assignment
 @login_required
 def admin():
     account = current_user.username
-    return render_template('back-end/_index.html', account=account)
+    return render_template('back-end/_index.html', account=account, current_user=current_user)
 
 
 @app.route('/create_tables/')
@@ -33,13 +33,13 @@ def create_tables():
 
     # Add teacher
     user = User()
-    teacher = user.insert_user(2, 'ducdan', 'ducdan123', 'ho.ducdan@gmail.com', 'ducdanducdan123ho.ducdan@gmail.com', 1)
+    teacher = user.insert_user(2, 'ducdan', 'ducdan123', 'dan', 'duc', 'ho.ducdan@gmail.com', 'binh dinh', 'Viet Nam', 'RCBD', 'ducdanducdan123ho.ducdan@gmail.com', 1)
     db.session.add(teacher)
     db.session.commit()
 
     # Add trainee
     user = User()
-    trainee = user.insert_user(3, 'baotruong', 'baotruong123', 'baotruong@gmail.com', 'truongbaotruongbao123truongbao@gmail.com', 1)
+    trainee = user.insert_user(3, 'baotruong', 'baotruong123', 'bao', 'truong' , 'baotruong@gmail.com', 'hue', 'Viet Nam', 'softworld', 'truongbaotruongbao123truongbao@gmail.com', 1)
     db.session.add(trainee)
     db.session.commit()
 

@@ -20,7 +20,7 @@
 					<th class="center">Created</th>
 					<th class="center">Login</th>
 					<th class="center">Activation</th>
-					<th class="center" width="80">Action</th>
+					<th class="center" width="120">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -70,13 +70,18 @@
 					<td>{{ item.activated }}</td>
 					<td class="center">
 						<div class="hidden-sm hidden-xs btn-group">
-							<a class="btn btn-xs btn-info" href="/user/create-user/{{ item.id }}" title="Edit this announcement">
+							<a class="btn btn-xs btn-primary" href="/user/detail-user/{{ item.id }}" title="View">
+								<i class="ace-icon fa fa-eye bigger-120"></i>
+							</a>
+							{% if current_user != None and current_user.role_id != 3 %}
+							<a class="btn btn-xs btn-info" href="/user/create-user/{{ item.id }}" title="Edit">
 								<i class="ace-icon fa fa-pencil bigger-120"></i>
 							</a>
 
-							<a class="btn btn-xs btn-danger" href="/delete_user?id={{ item.id }}" title="Delete this announcement">
+							<a class="btn btn-xs btn-danger" href="/delete_user?id={{ item.id }}" title="Delete">
 								<i class="ace-icon fa fa-trash-o bigger-120"></i>
 							</a>
+							{% endif %}
 						</div>
 						<div class="hidden-md hidden-lg">
 							<div class="inline pos-rel">

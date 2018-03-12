@@ -1,6 +1,7 @@
 from project import db
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 import datetime
+from flask_login import current_user
 from project.models.CourseModel import Course
 from project.models.UserModel import User
 
@@ -12,8 +13,10 @@ class Class(db.Model):
     code = Column(String, nullable=False)
     name = Column(String, nullable=False, unique=True)
     created = Column(DateTime, nullable=False)
+    created_by = Column(String(50), nullable=False)
     status = Column(Integer, nullable=False, default=1)
-    trainee = db.relationship('User', backref='class', lazy=True)
+    teacher = db.relationship('User', backref='class', lazy=True)
+    course = db.relationship('Course', backref='class', lazy=True)
 
     def __init__(self):
         self.course_id = 1
@@ -21,6 +24,7 @@ class Class(db.Model):
         self.code = 'class1'
         self.name = 'Class 1'
         self.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.created_by = 'admin'
         self.status = 1
 
     @staticmethod
@@ -31,6 +35,7 @@ class Class(db.Model):
         obj.code = code
         obj.name = name
         obj.created = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        obj.created_by = current_user.username
         obj.status = status
         return obj
 
@@ -53,6 +58,11 @@ class Class(db.Model):
             return obj
         else:
             return None
+
+    @staticmethod
+    def get_all_class():
+        return Class.query.filter().order_by(Class.code.asc()).all()
+
 
     @staticmethod
     def get_class_by_teacher(username, status=None):

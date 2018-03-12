@@ -20,7 +20,7 @@ def admin_entry(id=None):
         entry = None
         page_title = 'Add new entry'
     cat_list = Category.get_category_list()
-    return render_template('back-end/_entry-form.html', page_title=page_title, cat_list=cat_list, entry=entry, account=current_user.username)
+    return render_template('back-end/_entry-form.html', page_title=page_title, cat_list=cat_list, entry=entry, account=current_user.username, current_user=current_user)
 
 
 @app.route('/admin/add_entry/', methods=['POST'])
@@ -71,4 +71,4 @@ def delete_entry():
 def list_entry():
     page_title = 'List of entries'
     entry_list = Entry.get_entry_by_user()
-    return render_template('back-end/_entry-table.html', page_title=page_title, entry_list=entry_list, account=current_user.username)
+    return render_template('back-end/_entry-table.html', page_title=page_title, entry_list=entry_list, account=current_user.username, current_user=current_user)
